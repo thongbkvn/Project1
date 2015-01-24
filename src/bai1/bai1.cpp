@@ -133,7 +133,7 @@ int dayso::bublesort()
 void dayso::merge(int dau,int giua,int duoi)
 {
 
-  int i,m,k,l,temp[100];
+  int i,m,k,l,*temp=new int[len];
 
   l=dau;
   i=dau;
@@ -168,6 +168,7 @@ void dayso::merge(int dau,int giua,int duoi)
   for(k=dau;k<=duoi;k++){
     p[k]=temp[k];
   }
+  delete[] temp;
 }
 
 
