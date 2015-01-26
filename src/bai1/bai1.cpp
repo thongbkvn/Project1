@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <time.h>
 #define RANGE 99999999
-#define LENGTH 20000000
+#define LENGTH 100000
 
 
 
@@ -36,6 +36,36 @@ public:
   void selectionSort();
   void insertionSort();
   void shellSort();
+  
+  void quickSort()
+  {
+    partition(0,len-1);
+  }
+  void partition(int L, int H)
+  {
+    int i,j,pivot;
+    if (L>=H)
+      return;
+    i=L;j=H;
+    pivot=arr[L];
+
+    do
+      {
+	while (arr[i]<pivot)
+	  i++;
+	while (arr[j]>pivot)
+	  j--;
+	if (i<=j)
+	  {
+	    if (i<j)
+	      swap(i,j);
+	    i++; j--;
+	  }
+      }
+    while (i<j);
+    partition(L,j);
+    partition(i,H);
+  }
 };
 
 
@@ -48,9 +78,9 @@ int main(void)
 {
   noSeq list;
 
-  makeData(LENGTH);
+  // makeData(LENGTH);
   list.importFile();
-  list.shellSort();
+  list.quickSort();
   list.exportFile();
 
 
@@ -104,18 +134,18 @@ void noSeq::swap(int m,int n)
 
 
 void noSeq::selectionSort()
-  {
-    int i,j,min;
-    for (i=0;i<len-1;i++)
-      {
-	min=i;
-	for (j=i+1;j<len;j++)
-	    if (arr[j]<arr[min])
-	      min=j;
-	if (i!=min)
-	  swap(i,min);
-      }
-  }
+{
+  int i,j,min;
+  for (i=0;i<len-1;i++)
+    {
+      min=i;
+      for (j=i+1;j<len;j++)
+	if (arr[j]<arr[min])
+	  min=j;
+      if (i!=min)
+	swap(i,min);
+    }
+}
 void noSeq::input()
 {
   int i, n;
@@ -143,7 +173,7 @@ void noSeq::outScreen()
   cout<<endl;
   for (i=0;i<len;i++)
     {
-      cout<<setw(6)<<arr[i];
+      cout<<setw(8)<<arr[i]<<' ';
       if (i%10==9)
 	cout<<endl;
     }
@@ -157,7 +187,7 @@ void noSeq::exportFile(const char* filename)
   outp<<len<<endl;
   for (i=0;i<len;i++)
     {
-      outp<<setw(6)<<arr[i];
+      outp<<setw(8)<<arr[i]<<' ';
       if (i%10==9)
 	outp<<endl;
     }
@@ -174,7 +204,7 @@ void makeData(int n, const char* filename)
   for (i=0;i<n;i++)
     {
       a=rand()%RANGE;
-      outfile<<setw(6)<<a;
+      outfile<<setw(8)<<a<<' ';
       if (i%10 ==9)
 	outfile<<endl;
     }
