@@ -3,45 +3,46 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <iomanip>
+#define CITY 5
 #define RANGE 20
 using namespace std;
 
 
 int N, **C;
-int X[100]={0}, BestWay[100]={0}; //X de thu cac kha nang, BestWay de ghi nhan nghiem
-int T[100]={0}, Free[100]={0}, MinCost=100000;
+int X[100], BestWay[100]; //X thu cac kha nang, BestWay ghi nhan nghiem
+int T[100], Free[100], MinCost=100000; //T luu so tien, Free danh dau nhung diem da qua
 
-void capphat(int n);
-void nhapfile(const char* filename="bai2.in");
-void xuatmh();
-void taodulieu(int n, const char* filename="bai2.in");
+void allocate(int n);
+void importFile(const char* filename="bai2.in");
+void outScreen();
+void makeData(int n, const char* filename="bai2.in");
 void init();
 
-void findway(int i)
+void findWay(int i)
 {
   int j;
-  for (j=1;j<N;j++)
+  for (j=1;j<N;j++)//Cac gia tri co the nhan
     {
-      if (Free[j]==0)
+      if (Free[j]==0) //Neu chua di qua
 	{
-	  X[i]=j;
-	  T[i]=T[j-1]+C[X[i-1]][j];
-	  if (T[i]<MinCost)
+	  X[i]=j; //Thu di qua j
+	  T[i]=T[i-1]+C[X[i-1]][j];
+	  if (T[i]<MinCost) //Neu co kha nang di qua vs chi phi thap hon
 	    {
 	      if (i<N-1) //Neu di chua het
 		{
-		  Free[j]=1;
-		  findway(i+1);
-		  Free[j]=0;
+		  Free[j]=1; //Danh dau da di qua
+		  findWay(i+1); //Di tiep
+		  Free[j]=0; //Quay lai thanh pho, bo danh dau
 		}
 	      else //Neu da di het
 		{
 		  if (T[N-1]+C[X[N-1]][0] < MinCost) //Neu ton it chi phi hon
 		    {
 		      int k;
-		      for (k=0;k<N;k++)
-			BestWay[k]=X[k];
+		      for (k=1;k<N;k++) //Cap nhat cau hinh tot nhat		 
+			  BestWay[k]=X[k];
 		      MinCost=T[N-1]+C[X[N-1]][0];
 		    }
 		}
@@ -55,13 +56,16 @@ int main()
 {
   int i;
   init();
-  taodulieu(5);
-  nhapfile();
-  findway(1);
+  makeData(CITY);    //Tao du lieu dau vao
+  importFile();
+  
+  findWay(1);
+  
   for (i=0;i<N;i++)
-    cout<<BestWay[i]<<'\t';
-  cout<<endl;
+    cout<<BestWay[i]<<"-->";
+  cout<<0<<endl;
   cout<<MinCost;
+  
   cout<<endl;
 }
 
@@ -73,7 +77,7 @@ void init()
 }
 
 
-void capphat(int n)
+void allocate(int n)
 {
   N=n;
   C=new int*[n];
@@ -82,12 +86,12 @@ void capphat(int n)
     C[i]=new int[n];
 }
 
-void nhapfile(const char* filename)
+void importFile(const char* filename)
 {
   ifstream inp(filename);
   int n,i,j;
   inp>>n;
-  capphat(n);
+  allocate(n);
   for (i=0;i<n;i++)
     for (j=0;j<n;j++)
       inp>>C[i][j];
@@ -95,7 +99,7 @@ void nhapfile(const char* filename)
 
 
 
-void xuatmh()
+void outScreen()
 {
   int i,j;
   cout<<"\nXuat:"<<endl;
@@ -103,20 +107,20 @@ void xuatmh()
     {
       for (j=0;j<N;j++)
 	{
-	  cout<<C[i][j]<<'\t';
+	  cout<<setw(4)<<C[i][j];
 	}
       cout<<endl;
     }
   cout<<endl;
 }
 
-void taodulieu(int n,const char* filename)
+void makeData(int n,const char* filename)
 {
   int i,j,a,tmp[100][100];
   ofstream outfile(filename);
   outfile<<n<<endl;
   srand(time(NULL));
-  for (i=0;i<n*n;i++)
+  for (i=0;i<n;i++)
     {
       for (j=i;j<n;j++)
 	{
@@ -126,10 +130,10 @@ void taodulieu(int n,const char* filename)
 	    tmp[i][j]=0;
 	}
     }
-  for (i=0;i<n*n;i++)
+  for (i=0;i<n;i++)
     {
       for (j=0;j<n;j++)
-	outfile<<tmp[i][j]<<'\t';
+	outfile<<setw(4)<<tmp[i][j];
       outfile<<endl;
     }
   outfile<<endl;

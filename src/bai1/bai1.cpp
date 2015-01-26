@@ -1,179 +1,171 @@
-/*
-  Doi tuong: Day so
-  Thuoc tinh: 
-  -Chieu dai.
-  -Luu tru: Cap phat dong
-  Phuong thuc:
-  -Nhap day so
-  +Tu ban phim
-  +Tu file
-  -Xuat day so
-  +Tu ban phim
-  +Tu file
-  -Sap xep buble, heap, quick
-*/
-
-
 #include <iostream>
 #include <fstream> //Su dung nhap xuat file
 #include <stdio.h>
 #include <stdlib.h>
+#include <iomanip>
 #include <time.h>
-#define RANGE 20
-#define INF 4294967295
+#define RANGE 99999999
+#define LENGTH 20000000
+
+
+
 using namespace std;
 
-class dayso
+class noSeq
 {
 private:
   int len;
-  int *p;
+  int *arr;
 public:
-  int bublesort();
-
-  void merge(int dau, int giua, int duoi);
-  void mergesort(int dau, int duoi)
+  //Ham tao dung cap phat bo nho
+  void allocate(int n)
   {
-    int giua;
-    if (dau<duoi)
-      {
-	giua=(dau+duoi)/2;
-	mergesort(dau,giua);
-	mergesort(giua+1,duoi);
-	merge(dau,giua,duoi);
-      }
-  }
-  
-  //cap phat bo nho
-  void capphat(int n)
-  {
-    p=new int[n];
+    arr=new int[n];
     len=n;
   }
 
-  //hoan vi p[m] va p[n]
-  void hoanvi(int m,int n)
-  {
-    p[m]=p[m]+p[n];
-    p[n]=p[m]-p[n];
-    p[m]=p[m]-p[n];
-  }
-
-  //Cac ham nhap file
-  void nhapbp()
-  {
-    int i, n;
-    cout<<"\nNhap so phan tu cua day: ";
-    cin>>n;
-    capphat(n);
-    cout<<"\nNhap "<<len<<" so nguyen tu ban phim:"<<endl;
-    for (i=0;i<len;i++)
-      cin>>p[i];
-  }
-  void nhapfile(const char* filename="bai1.in")
-  {
-    ifstream inp(filename);
-    int n,i;
-    inp>>n;
-    capphat(n);
-    for (i=0;i<n;i++)
-      inp>>p[i];
-  }
-
-  //Cac ham xuat file
-  void xuatmh()
-  {
-    int i;
-    cout<<"\nXuat day so:"<<endl;
-    for (i=0;i<len;i++)
-      {
-	cout<<p[i]<<'\t';
-	if (i%10==9)
-	  cout<<endl;
-      }
-    cout<<endl;
-  }
-
-  
-  void xuatfile(const char* filename="bai1.out")
-  {
-    ofstream outp(filename);
-    int i;
-    outp<<len<<endl;
-    for (i=0;i<len;i++)
-      {
-	outp<<p[i]<<'\t';
-	if (i%10==9)
-	  outp<<endl;
-      }
-    outp<<endl;
-    outp.close();
-  }
+  //hoan vi arr[m] va arr[n]
+  void swap(int m,int n);
+  //Cac ham xuat nhap file
+  void input();
+  void importFile(const char* filename="bai1.in");
+  void outScreen();
+  void exportFile(const char* filename="bai1.out");
+ 
+  int bubleSort();
+  void selectionSort();
+  void insertionSort();
+  void shellSort();
 };
 
-//Sap xep noi bot
-int dayso::bublesort()
+
+
+//Tao left vao
+void makeData(int n,const char* filename="bai1.in");
+
+
+int main(void)
 {
-  int i,j,s=0;
-  for (i=0;i<len;i++)
-    for (j=i+1;j<len;j++)
-      if (p[i]>p[j])
+  noSeq list;
+
+  makeData(LENGTH);
+  list.importFile();
+  list.shellSort();
+  list.exportFile();
+
+
+  cout<<endl;
+  return 0;
+}
+
+
+void noSeq::shellSort()
+{
+  int i,j,h=len/2,tmp;
+  while (h>0)
+    {
+      for (i=h;i<len;i++)
 	{
-	  hoanvi(i,j);
-	  s++;
+	  tmp=arr[i];
+	  j=i-h;
+	  while (j>=0 && arr[j]>tmp)
+	    {
+	      arr[j+h]=arr[j];
+	      j=j-h;
+	    }
+	  arr[j+h]=tmp;
 	}
-  return s;
+      h=h/2;
+    }
 }
 
-/* Sap xep tron
-  
- */
-
-
-void dayso::merge(int dau,int giua,int duoi)
+void noSeq::insertionSort()
 {
-
-  int i,m,k,l,*temp=new int[len];
-
-  l=dau;
-  i=dau;
-  m=giua+1;
-
-  while((l<=giua)&&(m<=duoi)){
-
-    if(p[l]<=p[m]){
-      temp[i]=p[l];
-      l++;
+  int i,j,tmp;
+  for (i=1;i<len;i++)
+    {
+      tmp=arr[i];
+      j=i-1;
+      while (j>=0 && arr[j]>tmp)
+	{
+	  arr[j+1]=arr[j];
+	  j=j-1;
+	}
+      arr[j+1]=tmp;
     }
-    else{
-      temp[i]=p[m];
-      m++;
-    }
-    i++;
-  }
+}
 
-  if(l>giua){
-    for(k=m;k<=duoi;k++){
-      temp[i]=p[k];
-      i++;
-    }
-  }
-  else{
-    for(k=l;k<=giua;k++){
-      temp[i]=p[k];
-      i++;
-    }
-  }
-   
-  for(k=dau;k<=duoi;k++){
-    p[k]=temp[k];
-  }
-  delete[] temp;
+void noSeq::swap(int m,int n)
+{
+  arr[m]=arr[m]+arr[n];
+  arr[n]=arr[m]-arr[n];
+  arr[m]=arr[m]-arr[n];
 }
 
 
-//Tao dau vao
-void taodulieu(int n,const char* filename="bai1.in")
+void noSeq::selectionSort()
+  {
+    int i,j,min;
+    for (i=0;i<len-1;i++)
+      {
+	min=i;
+	for (j=i+1;j<len;j++)
+	    if (arr[j]<arr[min])
+	      min=j;
+	if (i!=min)
+	  swap(i,min);
+      }
+  }
+void noSeq::input()
+{
+  int i, n;
+  cout<<"\nNhap so phan tu cua day: ";
+  cin>>n;
+  allocate(n);
+  cout<<"\nNhap "<<len<<" so nguyen tu ban phim:"<<endl;
+  for (i=0;i<len;i++)
+    cin>>arr[i];
+}
+
+void noSeq::importFile(const char* filename)
+{
+  ifstream inp(filename);
+  int n,i;
+  inp>>n;
+  allocate(n);
+  for (i=0;i<n;i++)
+    inp>>arr[i];
+}
+
+void noSeq::outScreen()
+{
+  int i;
+  cout<<endl;
+  for (i=0;i<len;i++)
+    {
+      cout<<setw(6)<<arr[i];
+      if (i%10==9)
+	cout<<endl;
+    }
+  cout<<endl;
+}
+
+void noSeq::exportFile(const char* filename)
+{
+  ofstream outp(filename);
+  int i;
+  outp<<len<<endl;
+  for (i=0;i<len;i++)
+    {
+      outp<<setw(6)<<arr[i];
+      if (i%10==9)
+	outp<<endl;
+    }
+  outp<<endl;
+  outp.close();
+}
+
+void makeData(int n, const char* filename)
 {
   int i,a;
   ofstream outfile(filename);
@@ -182,7 +174,7 @@ void taodulieu(int n,const char* filename="bai1.in")
   for (i=0;i<n;i++)
     {
       a=rand()%RANGE;
-      outfile<<a<<'\t';
+      outfile<<setw(6)<<a;
       if (i%10 ==9)
 	outfile<<endl;
     }
@@ -190,18 +182,18 @@ void taodulieu(int n,const char* filename="bai1.in")
   outfile.close();
 }
 
-int main(void)
+//Sap xep noi bot
+int noSeq::bubleSort()
 {
-  dayso list;
-  int a;
-  taodulieu(30);
-  cout<<"\nNhap du lieu";
-  list.nhapfile();
-  list.xuatmh();
-  list.mergesort(0,30);
-  list.xuatmh();
-
-
-  cout<<endl;
-  return 0;
+  int i,j,s=0;
+  for (i=0;i<len;i++)
+    for (j=i+1;j<len;j++)
+      if (arr[i]>arr[j])
+	{
+	  swap(i,j);
+	  s++;
+	}
+  return s;
 }
+
+
