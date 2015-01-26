@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <iomanip>
 #include <time.h>
-#define RANGE 99999999
-#define LENGTH 100000
+#define RANGE 100
+#define LENGTH 10
 
 
 
@@ -25,7 +25,7 @@ public:
   }
 
   //hoan vi arr[m] va arr[n]
-  void swap(int m,int n);
+  void swap(int& m,int &n);
   //Cac ham xuat nhap file
   void input();
   void importFile(const char* filename="bai1.in");
@@ -41,31 +41,7 @@ public:
   {
     partition(0,len-1);
   }
-  void partition(int L, int H)
-  {
-    int i,j,pivot;
-    if (L>=H)
-      return;
-    i=L;j=H;
-    pivot=arr[L];
-
-    do
-      {
-	while (arr[i]<pivot)
-	  i++;
-	while (arr[j]>pivot)
-	  j--;
-	if (i<=j)
-	  {
-	    if (i<j)
-	      swap(i,j);
-	    i++; j--;
-	  }
-      }
-    while (i<j);
-    partition(L,j);
-    partition(i,H);
-  }
+  void partition(int L, int H);
 };
 
 
@@ -78,16 +54,42 @@ int main(void)
 {
   noSeq list;
 
-  // makeData(LENGTH);
+  makeData(LENGTH);
   list.importFile();
   list.quickSort();
-  list.exportFile();
+  list.outScreen();
 
 
   cout<<endl;
   return 0;
 }
 
+
+void noSeq::partition(int L, int H)
+{
+  int i,j,pivot;
+  if (L>=H)
+    return;
+  i=L;j=H;
+  pivot=arr[L];
+
+  do
+    {
+      while (arr[i]<pivot)
+	i++;
+      while (arr[j]>pivot)
+	j--;
+      if (i<=j)
+	{
+	  if (i<j)
+	    swap(arr[i],arr[j]);
+	  i++; j--;
+	}
+    }
+  while (i<j);
+  partition(L,j);
+  partition(i,H);
+}
 
 void noSeq::shellSort()
 {
@@ -125,11 +127,11 @@ void noSeq::insertionSort()
     }
 }
 
-void noSeq::swap(int m,int n)
+void noSeq::swap(int& m,int &n)
 {
-  arr[m]=arr[m]+arr[n];
-  arr[n]=arr[m]-arr[n];
-  arr[m]=arr[m]-arr[n];
+  m=m+n;
+  n=m-n;
+  m=m-n;
 }
 
 
@@ -143,7 +145,7 @@ void noSeq::selectionSort()
 	if (arr[j]<arr[min])
 	  min=j;
       if (i!=min)
-	swap(i,min);
+	swap(arr[i],arr[min]);
     }
 }
 void noSeq::input()
@@ -220,7 +222,7 @@ int noSeq::bubleSort()
     for (j=i+1;j<len;j++)
       if (arr[i]>arr[j])
 	{
-	  swap(i,j);
+	  swap(arr[i],arr[j]);
 	  s++;
 	}
   return s;
