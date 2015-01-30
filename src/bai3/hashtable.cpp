@@ -1,11 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <iomanip>
+#define MAX_LENGTH 1000
+#define MAX_CHAR 50
+
 using namespace std;
 
+//Luu danh sach chi muc
 class Node
 {
-public:
   int page;
   Node *next;
 
@@ -17,24 +21,24 @@ public:
 
   friend class Cell;
 };
-//Luu cac tu khoa
+
+//Luu cac tu khoa va con tro toi danh sach chi muc
 class Cell
 {
-  
-public:
-  char key[30];
+  char key[MAX_CHAR];
   Node *P;
   Cell *next;
 
   Cell(const char* word=NULL)
   {
-    bzero(key, 30);
+    bzero(key, MAX_CHAR);
     if (word != NULL)
       strcpy(key, word);
     next = NULL;
     P = NULL;
   }
-  
+
+  //Them chi muc vao keyword trong Cell hien tai
   void AddIndex(int page)
   {
     if (P != NULL)
@@ -52,6 +56,7 @@ public:
       }
   }
 
+  //In danh sach chi muc duoc tro boi P
   int List()
   {
     Node *p;
@@ -101,8 +106,10 @@ public:
     delete [] T;
   }
   
-  //Chen phan tu vao bang bam
-  //Cac keyword khong duoc phep trung
+  /*Chen phan tu vao bang bam
+  Cac keyword khong duoc phep trung
+  vi khong co theo tac kiem tra tu khoa
+  truoc khi nhap vao bang bam*/
   bool Insert(const char* keyword)
   {
     int k = HashFunc(keyword);
@@ -123,7 +130,7 @@ public:
   }
   
   //Tim kiem phan tu trong bang bam
-  bool Search(const char* keyword, int page)
+  bool IndexKey(const char* keyword, int page)
   {
     int k = HashFunc(keyword);
     Cell *p; 
@@ -135,7 +142,7 @@ public:
 	}
     return false;
   }
-
+  //Hien danh sach chi muc cua tu khoa keyword
   bool ListIndex(const char* keyword)
   {
     int k = HashFunc(keyword);
@@ -149,7 +156,8 @@ public:
     return false;
   }
     
-  //Hien cac phan tu co cung ma bam
+  /*Hien cac phan tu co cung ma bam
+    Dung de kiem tra, debug*/
   int List(const char* keyword)
   {
     int k = HashFunc(keyword), n=0;
@@ -185,29 +193,45 @@ int main()
   ifstream listWord("bai3.in");//Danh sach tu khoa
   ifstream document("document.in");
   Cell *a;
-  char *line = new char[1000], *word= new char[30];
+  char *line = new char[MAX_LENGTH], *word, *tmp;
   int n = 1;
-  //Nhap danh sach tu khoa
+  cout<<"HASH TABLE VERSION\n-----------------\n"<<endl;
+  //Nhap danh sach tu khoa vao bang bam
+  cout<<"Import keyword from \"bai3.in\"..."<<endl;
   while (!listWord.eof())
     {
-      char keyWord[30];
+      char keyWord[MAX_CHAR];
       listWord>>keyWord;
       Index.Insert(keyWord);
     }
+  cout<<"Indexing...."<<endl;
   
-  while (!document.eof())
+    while (!document.eof())
     {
       document.getline(line,1000);
-      while (strlen(line) > 0)
+      tmp = line;
+      while (strlen(tmp) > 0)
 	{
-	  split(line, word);
-	  Index.Search(word,n);
+	  split(tmp, word);
+	  Index.IndexKey(word,n);
 	}
       n++;
     }
-    
-  Index.ListIndex("me");
-  
+
+    word = new char[MAX_CHAR];
+   do
+    {
+      cout<<"\nEnter keyword: ";
+      cin>>word;
+      if (strcmp(word, "QUIT") == 0)
+	break;
+      cout<<word<<": ";
+      if (!Index.ListIndex(word))
+	cout<<"Keyword not found"<<endl;
+    }
+    while (1);
+   delete [] line;
+   delete[] word;
   listWord.close();
   document.close();
   cout<<endl;
