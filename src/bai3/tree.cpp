@@ -5,12 +5,12 @@
 #define MAX_LENGTH 1000
 using namespace std;
 
-class ListP
+class Node
 {
   int page;
-  ListP *next;
+  Node *next;
 
-  ListP()
+  Node()
   {
     page = 0;
     next = NULL;
@@ -36,7 +36,7 @@ void split(char* &sentence, char* &word)
 class Tree
 {
   char key[MAX_CHAR];
-  ListP *P;
+  Node *P;
   Tree *left;
   Tree *right;
 public:
@@ -80,14 +80,14 @@ public:
       {
 	if (root->P != NULL)
 	  {
-	    ListP *tmp = new ListP;
+	    Node *tmp = new Node;
 	    tmp->page = page;
-	    tmp->next = root->P->next;
+	    tmp->next = root->P;
 	    root->P = tmp;
 	  }
 	else
 	  {
-	    root->P = new ListP;
+	    root->P = new Node;
 	    root->P->page = page;
 	    root->P->next = NULL;
 	  }
@@ -111,9 +111,9 @@ public:
 	//Neu khong co chi muc nao
 	if (root->P == NULL)
 	  return false;
-	ListP *p;
+	Node *p;
 	for (p = root->P; p != NULL; p = p->next)
-	    cout<<p->page<<' ';
+	  cout<<p->page<<' ';
 	cout<<endl;
 	return true;
       }

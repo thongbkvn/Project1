@@ -59,6 +59,7 @@ public:
     for (p = this; p != NULL; p = p->next)
       if (strcmp(p->key, keyword) <= 0)
 	break;
+    
     if (strcmp(p->key, keyword) != 0)
       {
 	List *tmp = new List;
@@ -75,7 +76,8 @@ public:
     List *p;
     for (p = this; p != NULL; p = p->next)
       if (strcmp(p->key, keyword) == 0)
-	{    
+	{
+	  //Neu da co it nhat 1 chi muc
 	  if (p->P != NULL)
 	    {
 	      Node *tmp = new Node;
@@ -83,7 +85,7 @@ public:
 	      tmp->next = p->P;
 	      p->P=tmp;
 	    }
-	  else
+	  else //Neu chua co chi muc
 	    {
 	      p->P = new Node;
 	      p->P->page = page;
@@ -99,6 +101,8 @@ public:
     List *p;
     for (p = this; (p != NULL) && (strcmp(p->key, keyword) != 0); p = p->next);
     if (p == NULL)
+      return false;
+    if (p->P == NULL)
       return false;
     Node *tmp;
     for (tmp = p->P; tmp != NULL; tmp = tmp->next)
@@ -129,19 +133,18 @@ int main()
   List a;
   ifstream ListWord("bai3.in"); //Danh sach tu khoa
   ifstream Document("document.in"); //File can danh chi muc
-  char *line = new char[MAX_LENGTH], *word, *tmp;
+  char *line = new char[MAX_LENGTH], *word, *tmp, KeyWord[MAX_CHAR];
   int n = 1; //Bien dem so trang
   cout<<"LINK LIST VERSION\n------------------"<<endl;
   cout<<"Import keyword from \"bai3.in\"..."<<endl;
   while (!ListWord.eof())
     {
-      char KeyWord[MAX_CHAR];
       ListWord>>KeyWord;
       a.Insert(KeyWord);
     }
-
+  ListWord.close();
+  a.ListKeyWord();
   cout<<"Indexing..."<<endl;
-  
   while (!Document.eof())
     {
       Document.getline(line, MAX_LENGTH);
@@ -153,7 +156,9 @@ int main()
 	}
       n++;
     }
-    
+  delete [] line;
+  Document.close();
+  
   word = new char[MAX_CHAR];
   do
     {
@@ -162,13 +167,10 @@ int main()
       if (strcmp(word, "QUIT") == 0)
 	break;
       if (!a.ListIndex(word))
-	cout<<"Keyword not found"<<endl;
+	cout<<"Keyword isn't in index list or not found in document"<<endl;
     } while (1);
-  
-  delete [] line;
   delete [] word;
-  ListWord.close();
-  Document.close();
+  
   cout<<"\n------------\nExit program"<<endl;
   return 0;
 }
