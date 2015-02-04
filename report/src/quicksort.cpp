@@ -20,7 +20,7 @@ void partition(int L, int H)
 
 		if (i<=j)
 		{
-			//Neu tim thay va hai phan tu do khac nhau thi doi cho
+			//Neu tim thay va hai phan tu khac nhau thi doi cho
 			if (i<j) 
 				swap(arr[i],arr[j]); 
 			i++; j--;
