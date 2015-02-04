@@ -2,7 +2,7 @@
 #include <iomanip>
 #include <math.h>
 using namespace std;
-#define N 4 // Kich thuoc ban co
+#define N 5 // Kich thuoc ban co
 
 /*
   CLASS BAN CO
@@ -45,25 +45,21 @@ public:
 			n++;
 			cout<<endl;
 		}
-	// Tim nuoc di, nuoc di dau tien da duoc di tai firstRow, firstCol
-	void Patrol(int m, int n, int k=2) 
+
+	void Patrol(int m, int n, int k=2) // Tim nuoc di, nuoc di dau tien da duoc di tai firstRow, firstCol
 		{
 			int i, j;
 			for (i = 0; i < N; i++)
 				for (j = 0; j < N; j++)
-					// Neu co the di duoc toi o i,j va o do chua duoc di toi
-					if (((fabs(i-m) + fabs(j-n)) == 3) && (i!=m && j!=n && A[i][j]==0))
+					if (((fabs(i-m) + fabs(j-n)) == 3) && (i!=m && j!=n && A[i][j]==0)) // Neu co the di duoc toi o i,j va
+						// o do chua duoc di toi
 					{
-						// Thu di toi A[i][j], luu ket qua va dau hieu vao mang A
-						A[i][j] = k;
-						// Neu da la nuoc di cuoi
-						if (k == N*N) 
+						A[i][j] = k; // Thu di toi A[i][j], mang A vua luu ket qua, vua luu dau hieu nen phai bo danh dau o sau
+						if (k == N*N) // Neu da la nuoc di cuoi
 						{
 							printBoard(); // Hien thi ban co
-							// Buoc dau tien thi khong bo danh dau
-							//Neu khong thi bo danh dau
-							if ((i != firstRow) && (j != firstCol)) 
-								A[i][j]=0; 
+							if ((i != firstRow) && (j != firstCol)) // Buoc dau tien thi khong the thay doi,neu khong co dieu
+								A[i][j]=0; //Bo danh dau     // kiennay se hien thi toan bo moi cach di tu bat ki nao
 						}
 						else
 						{
