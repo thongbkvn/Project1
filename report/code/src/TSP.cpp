@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iomanip>
-#define CITY 10
+#define CITY 5
 #define RANGE 20
 using namespace std;
 

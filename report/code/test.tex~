@@ -1,0 +1,10 @@
+\documentclass{article}
+\usepackage{minted}
+\begin{document}
+int main()
+{
+  printf(``Hello, world'');
+  return 0;
+}
+
+\end{document}

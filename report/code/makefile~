@@ -1,0 +1,3 @@
+all: bai24
+bai21: bai24.cpp
+	g++ bai24.cpp -o bai24
