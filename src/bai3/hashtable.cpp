@@ -10,230 +10,234 @@ using namespace std;
 //Luu danh sach chi muc
 class Node
 {
-  int page;
-  Node *next;
+    int page;
+    Node *next;
 
-  Node()
-  {
-    next = NULL;
-    page = 0;
-  }
+    Node()
+	{
+	    next = NULL;
+	    page = 0;
+	}
 
-  friend class Cell;
+    //Them phan tu vao cuoi danh sach
+    void AddNode(int page)
+	{
+	    Node *tmp, *p = this;
+	    tmp = new Node;
+	    tmp->page = page;
+	    while (p->next != NULL)
+		p = p->next;
+	    p->next = tmp;
+	}
+    //Xuat danh sach lien ket tro boi this->next
+    int ListNode()
+	{
+	    Node *p;
+	    int s = 0; //Bien luu so trang trong danh sach
+	    for (p = next; p != NULL; p = p->next)
+		{
+		    cout<<p->page<<' ';
+		    s++;
+		}
+	    cout<<endl;
+	    return s;
+	}
+
+    friend class Cell;
 };
 
 //Luu cac tu khoa va con tro toi danh sach chi muc
 class Cell
 {
-  char key[MAX_CHAR];
-  Node *P;
-  Cell *next;
+    char key[MAX_CHAR];//Mang luu tu khoa
+    Node P;//Header cua dslk tuu danh sach cac trang 
+    Cell *next;
 
-  Cell(const char* word=NULL)
-  {
-    bzero(key, MAX_CHAR);
-    if (word != NULL)
-      strcpy(key, word);
-    next = NULL;
-    P = NULL;
-  }
+    //Ham tao
+    Cell(const char* word=NULL)
+	{
+	    bzero(key, MAX_CHAR);
+	    if (word != NULL)
+		strcpy(key, word);
+	    next = NULL;
+	}
 
-  //Them chi muc vao keyword trong Cell hien tai
-  void AddIndex(int page)
-  {
-    if (P != NULL)
-      {
-	Node *tmp = new Node;
-	tmp->page = page;
-	tmp->next = P;
-	P = tmp;
-      }
-    else
-      {
-	P = new Node;
-	P->page = page;
-	P->next = NULL;
-      }
-  }
+    //Them chi muc vao keyword trong Cell hien tai
+    void AddIndex(int page)
+	{
+	    P.AddNode(page);
+	}
 
-  //In danh sach chi muc duoc tro boi P
-  int List()
-  {
-    Node *p;
-    for (p = P; p != NULL; p = p->next)
-      cout<<p->page<<' ';
-    cout<<endl;
-  }
+    //In danh sach chi muc duoc tro boi P
+    int ListNode()
+	{
+	    return P.ListNode();
+	}
 
-  friend class HashTable;
+    friend class HashTable;
 };
 
 class HashTable
 {
-  Cell **T; //Con tro toi dau moi danh sach keyword
-  int m; //Kich thuoc cua bang bam
+    Cell **T; //Con tro toi dau moi danh sach keyword
+    int m; //Kich thuoc cua bang bam
 
 public:
-  //Ham tao
-  HashTable(int size=100)
-  {
-    m = size;
-    T = new Cell*[m];
-    for (int i =0 ; i < m; i++)
-      T[i] = NULL;
-  }
-  //Ham bam
-  int HashFunc(const char* keyword)
-  {
-    int S=0;
-    for (int i = 0; i < strlen(keyword); i++)
-      S += keyword[i];
-    return S % 100;
-  }
-  //Ham huy
-  ~HashTable()
-  {
-    for (int i = 0; i < m; i++)
-      if (T[i] != NULL)
+    //Ham tao
+    HashTable(int size=100)
 	{
-	  for (Cell *p = T[i]; p != NULL; )
-	    {
-	      Cell *q = p;
-	      p = p->next;
-	      delete q;
-	    }
+	    m = size;
+	    T = new Cell*[m];
+	    for (int i =0 ; i < m; i++)
+		T[i] = NULL;
 	}
-    delete [] T;
-  }
+    //Ham bam
+    int HashFunc(const char* keyword)
+	{
+	    int S=0;
+	    for (int i = 0; i < strlen(keyword); i++)
+		S += tolower(keyword[i]);
+	    return S % 100;
+	}
+
+    /*Chen phan tu vao bang bam
+      Cac keyword khong duoc phep trung
+      vi khong co theo tac kiem tra tu khoa
+      truoc khi nhap vao bang bam*/
+    bool Insert(const char* keyword)
+	{
+	    int k = HashFunc(keyword);
+	    //Neu phan tu T[k] con rong thi tao moi va chen vao
+	    if (T[k] == NULL)
+		{
+		    T[k] = new Cell;
+		    strcpy(T[k]->key, keyword);
+		    return true;
+		}
+	    //Neu khong thi chen vao dau dslk tro boi T[k]->next
+	    else
+		{
+		    Cell *tmp = new Cell;
+		    strcpy(tmp->key, keyword);
+		    tmp->next = T[k]->next;
+		    T[k]->next = tmp;
+		    return true;
+		}
+	}
   
-  /*Chen phan tu vao bang bam
-  Cac keyword khong duoc phep trung
-  vi khong co theo tac kiem tra tu khoa
-  truoc khi nhap vao bang bam*/
-  bool Insert(const char* keyword)
-  {
-    int k = HashFunc(keyword);
-    if (T[k] == NULL)
-      {
-	T[k] = new Cell;
-	strcpy(T[k]->key, keyword);
-	return true;
-      }
-    else
-      {
-	Cell *tmp = new Cell;
-	strcpy(tmp->key, keyword);
-	tmp->next = T[k]->next;
-	T[k]->next = tmp;
-	return true;
-      }
-  }
-  
-  //Tim kiem phan tu trong bang bam
-  bool IndexKey(const char* keyword, int page)
-  {
-    int k = HashFunc(keyword);
-    Cell *p; 
-    for (p = T[k]; p != NULL; p = p->next)
-      if (strcmp(p->key, keyword) == 0)
+    //Tim kiem phan tu trong bang bam
+    bool IndexKey(const char* keyword, int page)
 	{
-	  p->AddIndex(page);
-	  return true;
+	    int k = HashFunc(keyword);
+	    Cell *p;
+	    //Tim tu khoa trong bang bam
+	    for (p = T[k]; p != NULL; p = p->next)
+		//Neu co them trang vao danh sach chi muc
+		if (strcasecmp(p->key, keyword) == 0)
+		    {
+			p->AddIndex(page);
+			return true;
+		    }
+	    return false;
 	}
-    return false;
-  }
-  //Hien danh sach chi muc cua tu khoa keyword
-  bool ListIndex(const char* keyword)
-  {
-    int k = HashFunc(keyword);
-    Cell *p;
-    for (p = T[k]; p != NULL; p = p->next)
-      if (strcmp(p->key, keyword) == 0)
-	{
-	  p->List();
-	  return true;
-	}
-    return false;
-  }
     
-  /*Hien cac phan tu co cung ma bam
-    Dung de kiem tra, debug*/
-  int List(const char* keyword)
-  {
-    int k = HashFunc(keyword), n=0;
-    Cell *p;
-    for (p = T[k]; p != NULL; p = p->next)
-      {
-	cout<<p->key<<' ';
-	n++;
-      }
-    cout<<endl;
-    return n;
-  }
+    //Hien danh sach chi muc cua tu khoa keyword
+    bool ListIndex(const char* keyword)
+	{
+	    int k = HashFunc(keyword);
+	    Cell *p;
+	    //Tim tu khoa trong bang bam
+	    for (p = T[k]; p != NULL; p = p->next)
+		//Neu co thi in ra danh sach chi muc
+		if (strcasecmp(p->key, keyword) == 0)
+		    {
+			if (p->ListNode())
+			    return true;
+			return false;
+		    }
+	    return false;
+	}
+    
+    /*Hien cac phan tu co cung ma bam
+      Dung de kiem tra, debug*/
+    int List(const char* keyword)
+	{
+	    int k = HashFunc(keyword), n=0;
+	    Cell *p;
+	    for (p = T[k]; p != NULL; p = p->next)
+		{
+		    cout<<p->key<<' ';
+		    n++;
+		}
+	    cout<<endl;
+	    return n;
+	}
 };
 
-
+//Chia cau thanh cac tu bang nhau
 void split(char* &sentence, char* &word)
 {
-  while (*sentence==' ')
-    sentence++;
-  word=sentence;
-  while ((*sentence!=' ')&&(*sentence!='\0'))
-    sentence++;
-  if (*sentence==' ')
-    {
-      *sentence='\0';
-      sentence++;
-    }
+    while (*sentence==' ')
+	sentence++;
+    word=sentence;
+    while ((*sentence!=' ')&&(*sentence!='\0'))
+	sentence++;
+    if (*sentence==' ')
+	{
+	    *sentence='\0';
+	    sentence++;
+	}
 }
 
 int main()
 {
-  HashTable Index;
-  ifstream listWord("bai3.in");//Danh sach tu khoa
-  ifstream document("document.in");
-  Cell *a;
-  char *line = new char[MAX_LENGTH], *word, *tmp;
-  int n = 1;
-  cout<<"HASH TABLE VERSION\n-----------------\n"<<endl;
-  //Nhap danh sach tu khoa vao bang bam
-  cout<<"Import keyword from \"bai3.in\"..."<<endl;
-  while (!listWord.eof())
-    {
-      char keyWord[MAX_CHAR];
-      listWord>>keyWord;
-      Index.Insert(keyWord);
-    }
-  cout<<"Indexing...."<<endl;
-  
-    while (!document.eof())
-    {
-      document.getline(line,1000);
-      tmp = line;
-      while (strlen(tmp) > 0)
+    HashTable Index;
+    ifstream input("bai3.in");//Danh sach tu khoa
+    ifstream document("document.in");//Tai lieu can danh chi muc
+    char *line = new char[MAX_LENGTH], *word, *tmp;
+    char KeyWord[MAX_CHAR];
+    int n = 1;
+    cout<<"HASH TABLE VERSION\n-----------------\n"<<endl;
+    
+    //Nhap danh sach tu khoa vao bang bam
+    cout<<"Import keyword from \"bai3.in\"..."<<endl;
+    while (!input.eof())
 	{
-	  split(tmp, word);
-	  Index.IndexKey(word,n);
+	    input>>KeyWord;
+	    Index.Insert(KeyWord);
 	}
-      n++;
-    }
-
+    input.close();
+    
+    cout<<"Indexing...."<<endl;
+    //Danh chi muc cho tu khoa
+    while (!document.eof())
+	{
+	    //Doc tung cau
+	    document.getline(line,1000);
+	    tmp = line;
+	    while (strlen(tmp) > 0)
+		{
+		    //Tach cau thanh cac tu
+		    split(tmp, word);
+		    Index.IndexKey(word,n);
+		}
+	    n++;
+	}
+    document.close();
+    
     word = new char[MAX_CHAR];
-   do
-    {
-      cout<<"\nEnter keyword: ";
-      cin>>word;
-      if (strcmp(word, "QUIT") == 0)
-	break;
-      cout<<word<<": ";
-      if (!Index.ListIndex(word))
-	cout<<"Keyword not found"<<endl;
-    }
+    do
+	{
+	    cout<<"Enter keyword: ";
+	    cin>>word;
+	    if (strcmp(word, "QUIT") == 0)
+		break;
+	    if (!Index.ListIndex(word))
+		cout<<"Keyword isn't in the index list or not found in document"<<endl;
+	}
     while (1);
-   delete [] line;
-   delete[] word;
-  listWord.close();
-  document.close();
-  cout<<endl;
-  return 0;
+    delete [] line;
+    delete[] word;
+    cout<<endl;
+    return 0;
 }
