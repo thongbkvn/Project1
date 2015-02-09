@@ -26,12 +26,7 @@
 \newpage
 \abstract
 Báo cáo gồm ba phần trình bày các bài toán sắp xếp, giải thuật quay lui, đánh chỉ mục từ khóa trong văn bản. 
-
-Phần thứ nhất trình bày về ý tưởng, cài đặt và độ phức tạp của các thuật toán sắp xếp cơ bản bao gồm \texttt{buble sort, selection sort, insertion sort, shell sort, quick sort, heap sort}. 
-
-Phần thứ hai trình bày một số bài toán về giải thuật quay lui trong bài toán \emph{tám hậu}, \emph{mã đi tuần} và kĩ thuật nhánh cận trong bài toán \emph{người du lịch}. 
-
-Phần thứ ba trình bày về các cách cài đặt khác nhau của bài toán đánh chỉ mục từ khóa trong văn bản trên các cấu trúc dữ liệu khác nhau bao gồm \emph{danh sách liên kết}, \emph{bảng băm}, \emph{cây nhị phân tìm kiếm}
+Phần thứ nhất trình bày về ý tưởng, cài đặt và độ phức tạp của các thuật toán sắp xếp cơ bản bao gồm \texttt{buble sort, selection sort, insertion sort, shell sort, quick sort, heap sort}. Phần thứ hai trình bày một số bài toán về giải thuật quay lui trong bài toán \emph{tám hậu}, \emph{mã đi tuần} và kĩ thuật nhánh cận trong bài toán \emph{người du lịch}. Phần thứ ba trình bày về các cách cài đặt khác nhau của bài toán đánh chỉ mục từ khóa trong văn bản trên các cấu trúc dữ liệu khác nhau bao gồm \emph{danh sách liên kết}, \emph{bảng băm}, \emph{cây nhị phân tìm kiếm}
 
 Các chương trình trong báo cáo được trình bày bằng ngôn ngữ lập trình C++
 \section{Các thuật toán sắp xếp}
@@ -211,8 +206,9 @@ T(n)=& (T(\frac{a_{n-1}}{c}) + \frac{a_{n-1}}{c}C n) + (T(\frac{b_{n-1}}{c}) + \
 T(n)=& Max(T(\frac{a_{n-1}}{c}) \frac{a_{n-1}}{c}C n)+ ,T(\frac{b_{n-1}}{c}) + \frac{b_{n-1}}{c}C n))\\
 T(n)=& T(\frac{b_{n-1}}{c}) + \frac{b_{n-1}}{c}C n)
 \end{array}
-Giải tương tự như trường hợp 1, ta tính được độ phức tạp của thuật toán \emph{Quick Sort} trong trường hợp này là 
 \end{displaymath}
+
+Giải tương tự như trường hợp 1, ta tính được độ phức tạp của thuật toán \emph{Quick Sort} trong trường hợp này là $\Theta(n \log n)$.
 \end{itemize}
 
 
@@ -221,7 +217,7 @@ Giải tương tự như trường hợp 1, ta tính được độ phức tạp
 Heap Sort được đề xuất bởi J.W.J.Williams năm 1981, thuật toán không những đóng góp một phương pháp sắp xếp quan trọng để biểu diễn một cấu trúc dữ liệu quan trọng 
 
 \subsubsection{Đống - Heap}
-Đống (Hình \ref{HeapTree}) là một dạng \emph{cây nhị phân hoàn chỉnh đặc biệt} mà giá trị tại mọi nút có độ ưu tiên cao hơn hay bằng giá trị lưu trong hai nút con của nó. Trong thuật toán sắp xếp kiểu vun đống, ta coi quan hệ "ưu tiên hơn hay bằng" là quan hệ "lớn hơn hay bằng": $ \ge $
+Đống là một dạng \emph{cây nhị phân hoàn chỉnh đặc biệt} mà giá trị tại mọi nút có độ ưu tiên cao hơn hay bằng giá trị lưu trong hai nút con của nó. Trong thuật toán sắp xếp kiểu vun đống, ta coi quan hệ "ưu tiên hơn hay bằng" là quan hệ "lớn hơn hay bằng": $ \ge $
 \begin{figure}[htb]
 \centering
 \includegraphics[scale=0.6]{img/heaptree.png}
@@ -231,7 +227,7 @@ Heap Sort được đề xuất bởi J.W.J.Williams năm 1981, thuật toán kh
 
 \subsubsection{Vun đống}
 
-Để biểu diễn dãy khóa arr[0...len-1] thành một cây nhị phân hoàn chỉnh. Giá trị arr[i] lưu trong nút thứ i (i bắt đầu từ 0). Nút con trái của nút thứ i là arr[2i+1] và con phải của nút thứ i là arr[2i+2]. Nút cha của nút thứ j là $(j-1) \% 2$. Hình \ref{mangdong} minh họa việc biểu diễn đống bằng mảng.
+Để biểu diễn dãy khóa arr[0...len-1] thành một cây nhị phân hoàn chỉnh. Giá trị arr[i] lưu trong nút thứ i (i bắt đầu từ 0). Nút con trái của nút thứ i là arr[2i+1] và con phải của nút thứ i là arr[2i+2]. Nút cha của nút thứ j là $(j-1) \% 2$.
 \begin{figure}[htp]
 \centering
 \includegraphics[scale=0.40]{img/bddong.png}
@@ -271,6 +267,57 @@ Thuật toán Heap Sort có hai hàm chính:
 \mnt{src/heapsort.cpp}
 
 \paragraph{Độ phức tạp thuật toán}
+Thuật toán sắp xếp \emph{Heap Sort} có độ phức tạp $n \log n $ trong mọi trường hợp.
+
+
+\subsection{Đánh giá thời gian thực tế của thuật toán}Sau đây là một số kết quả chạy thử với các bộ dữ liệu đầu vào là các dãy sỗ được tạo ngẫu nhiên. Thời gian được tính theo đơn vị $ms$. 
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics[scale=0.50]{img/bai1_20.png}
+\caption{Dãy đầu vào có 20 phần tử}
+\label{}
+\end{center}
+Trường hợp này, \emph{Quick Sort} chạy lâu nhất bởi có nhiều lời gọi đệ quy nhất. Tốc độ thực hiện kém xa các thuật toán khác.
+\end{figure}
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics[scale=0.5]{img/bai1_100.png}
+\caption{Dãy đầu vào có 100 phần tử.}
+\label{}
+\end{center}
+\emph{Quick Sort} vẫn tỏ ra kém hơn so với các thuật toán khác. \emph{Buble Sort} bắt đầu tỏ ra chậm hơn so với \emph{Selection Sort} và \emph{Insertion Sort} do thực hiện nhiều phép tráo đổi.
+\end{figure}
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics[scale=0.50]{img/bai1_10000.png}
+\caption{Dãy đầu vào có 10 000 phần tử.}
+\label{}
+\end{center}
+Các thuật toán sắp xếp \emph{Shell Sort}, \emph{Heap Sort}, \emph{Quick Sort} vượt trội hơn hẳn. \emph{Buble Sort} chậm nhất với $0.5s$.
+\end{figure}
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics[scale=0.50]{img/bai1_100000.png}
+\caption{Dãy đầu vào có 100 000 phần tử.}
+\label{}
+\end{center}
+Các thuật toán sắp xếp như \emph{Buble Sort}, \emph{Selection Sort}, \emph{Insertion Sort} yếu kém hơn hẳn, ta sẽ không xét đến chúng trong ví dụ tới nữa. \emph{Shell Sort} và \emph{Heap Sort} vẫn rất ấn tượng với thời gian sắp xếp là $0.34s$.
+\end{figure}
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics[scale=0.50]{img/bai1_10000000.png}
+\caption{Dãy đầu vào có 10 000 000 phần tử.}
+\label{}
+\end{center}
+\emph{Heap Sort} và \emph{Shell Sort} vẫn tỏ ra rất vượt trội.
+\end{figure}
+\newpage
+
 
 
 \section{Các bài toán về thuật toán quay lui và kĩ thuật nhánh cận}
@@ -429,6 +476,7 @@ Hành trình cần tìm có dạng X[0...N], trong đó, $X[0] = X[N] = 0$, và 
 
 \mnt{src/TSP.cpp}
 
+\newpage
 
 \section{Bài toán đánh chỉ mục cho danh sách từ khóa}
 
@@ -436,17 +484,27 @@ Hành trình cần tìm có dạng X[0...N], trong đó, $X[0] = X[N] = 0$, và 
 Có một file văn bản gồm danh sách các từ khóa và một file văn bản khác là tài liệu chứa các từ khóa đó. Viết chương trình lưu danh sách từ khóa và dòng xuất hiện của từ khóa đó trong tài liệu, cài đặt với các cấu trúc dữ liệu khác nhau: danh sách liên kết, bảng băm, cây nhị phân tìm kiếm.
 
 \subsection{Ý tưởng}
-Lưu cấu trúc chứa danh sách trang trong tập tin sau 
+Lưu các từ khóa trong các cấu trúc dữ liệu khác nhau - danh sách liên kết, bảng băm và cây nhị phân tìm kiếm.
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.40]{img/Diagram1.png}
+\caption{Danh sách liên kết chứa từ khóa.}
+\label{}
+\end{figure}
+Với mỗi nút, ngoài mảng kí tự chứa từ khóa, ta còn lưu thêm một biến kiểu Node chính là \emph{Header} của danh sách liên kết, mà mỗi phần tử của danh sách liên kết là một số nguyên, biểu thị cho vị trí xuất hiện của từ khóa.
+
+Đọc lần lượt từng dòng của \emph{tài liệu} cần đánh chỉ mục, với mỗi dòng, đọc được, ta lần lượt tìm kiếm các từ xuất hiện trong dòng đó xem có trùng với từ khóa được lưu trữ trong cấu trúc dữ liệu trước đó không, nếu trùng, thêm vị trí xuất hiện của từ khóa (số thứ tự dòng) vào danh sách liên kết có header là phần tử kiểu Node. Xem hình minh họa để hiểu rõ hơn chi tiết cài đặt.
+
+
 
 \subsection{Cài đặt với danh sách liên kết}
 \mnt{src/linkedlist.cpp}
-
+\newpage
 \subsection{Cài đặt với bảng băm}
 \mnt{src/hashtable.cpp}
-
+\newpage
 \subsection{Cài đặt với cây nhị phân tìm kiếm}
 \mnt{src/tree.cpp}
-
 \subsection{Kết quả chạy thử}
 \begin{figure}[htp]
 \centering

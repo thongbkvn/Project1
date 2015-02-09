@@ -1,39 +1,33 @@
+
 void maxHeapify(int root, int endnode)
 {
-  int c, key;
-  key = arr[root];
-  //Khi nao root chua phai la la
-  while ((root*2 + 1) <= endnode)
+    int c1, c2, bg;
+    
+  while (root <= endnode/2-1) //Khi nao root chua phai la la
     {
-      c=root * 2 + 1;
-      //Neu con trai be hon con phai thi c=chi so con phai
-      if ((c < endnode-1) && (arr[c] < arr[c+1]))
-	c++;
-      //Neu 2 con be hon root thi cay da la maxheap
-      if (arr[c] <= key) 
-	break;
-      //Doi cho cho con lon hon
-      arr[root] = arr[c];
-      // Tiep tuc voi root tai vi tri moi
-      root = c; 
+	c1 = 2*root + 1;//c1 = con trai
+	c2 = 2*root +2;//c2 = con phai
+	bg = c1; //con lon hon la c1
+	//Neu con phai lon hon con trai thi gan biger cho con phai
+	if ((c2 < len) && (arr[c2] > arr[bg]))
+	    bg = c2;
+	//Neu 1 trong 2 con lon hon root thi doi cho
+      if (arr[bg] > arr[root]) 
+	  swap(arr[root], arr[bg]); //Doi cho cho con lon hon
+      //Tiep tuc voi vi tri da chuyen
+      root = bg;
     }
-  //root ban dau nam dung vi tri  
-  arr[root] = key; 
 }
 
 void heapSort()
 {
   int r, i;
-  // Xay dung dong tren toan bo cay
-  for (r = (len/2 - 1); r >= 0; r--) 
-    maxHeapify(r, len-1);
-  for (i = len-1; i>0; i--)
+  for (r = (len/2-1); r >= 0; r--) // Xay dung dong tren toan bo cay
+    maxHeapify(r, len);
+
+  for (i = len-1; i > 0; i--)
     {
-      //Doi cho nut lon nhat ve cuoi day
-      swap(arr[0], arr[i]); 
-      //Xay lai dong, ko kem nut vua hoan doi
-      maxHeapify(0, i-1); 
+      swap(arr[0], arr[i]); //Doi cho nut lon nhat ve cuoi day
+      maxHeapify(0, i-1); //Xay lai dong, ko kem nut vua hoan doi
     }
 }
-
-
