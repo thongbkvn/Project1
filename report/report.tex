@@ -4,7 +4,8 @@
 \usepackage{amsmath}
 \usepackage[pdftex]{graphicx}
 \usepackage{color}
-\usepackage[margin=2cm]{geometry}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amssymb}
 
 \newcommand{\mnt}[1]{\inputminted[frame=single, linenos=true, tabsize=4]{c++}{#1}}
 \title{\textbf{\huge{ĐỒ ÁN I}}\\ \large{\textsc{LẬP TRÌNH}}}
@@ -61,14 +62,25 @@ Mục này trình bày các cài đặt một số giải thuật sắp xếp ph
 \item Kí hiệu arr[i...j] được hiểu là các phần tử từ arr[i] đến arr[j] trong mảng arr.
 \end{itemize}
 
+
+
 \subsection{Thuật toán sắp xếp nổi bọt}
 
 Trong thuật toán săp xếp nổi bọt, các dãy khóa sẽ được duyệt từ cuối dãy lên đàu dãy (từ \texttt{arr[len-1]} về \texttt{arr[0]}), nếu gặp hai khóa kề nhau bị ngược thứ tự thì đổi chỗ của chúng cho nhau, sau lần duyệt như vậy, khóa nhỏ nhất sẽ trở về vị trí đầu tiên, quá trình lại tiếp tục với các khóa từ dãy \texttt{arr[1]} tới \texttt{arr[len-1]}:
 
+\paragraph{Cài đặt}
 Cài đặt thuật toán trong C++ như sau:
 \mnt{src/bublesort.cpp}
 
-\subsection{Thuật tóan sắp xếp chọn}
+\paragraph{Đánh giá độ phức tạp thuật toán}
+Chọn phép toán so sánh $arr[i] < arr[j]$ làm phép toán tích cực để đánh giá hiệu suất thực hiện của thuật toán \emph{về mặt thời gian}. Ở lượt chọn thứ $i$ thì cần $n-i$ phép so sánh ($n$ là \emph{kích thước dữ liệu đầu vào}, trong trường hợp này $n = len$. Vậy số lần thực hiện phép so sánh là:
+$$(n-1) + (n-2) + ... + 1 = \frac{n(n-1)}{2}$$. Vậy thời gian thực hiện của thuật toán là $O(n^2)$
+
+
+
+
+
+\subsection{Thuật toán sắp xếp chọn}
 
 Một trong những thuật toán sắp xếp đơn giản nhất là phương pháp sắp xếp chọn. Ý tưởng của thuật toán:
 \begin{itemize}
@@ -80,14 +92,42 @@ Một trong những thuật toán sắp xếp đơn giản nhất là phương p
 
 Kết thúc quá trình duyệt thì dãy còn lại đã được sắp xếp.
 
+\paragraph{Cài đặt}
 Sau đây là cài đặt của thuật toán trên C++:
 \mnt{src/selectionsort.cpp}
+
+\paragraph{Đánh giá độ phức tạp thuật toán}
+Tương tự như giải thuật \emph{buble sort}, chọn phép toán $arr[i] < arr[min]$ làm phép toán tích cực để đánh giá độ phức tạp của thuật toán về mặt thời gian. Số lần thực hiện phép toán tích cực tương tự như đối với giải thuật \emph{buble sort} vẫn là $\frac{n(n-1)}{2} = O(n^2)$.
+
+
+
+
 
 \subsection{Thuật toán sắp xếp kiểu chèn}
 
 Xét dãy khóa arr[0...len-1], ta thấy chỉ gồm một khóa arr[0] chỉ gồm 1 khóa và có thể coi là đã sắp xếp rồi. Xét thêm arr[1], ta so sánh nó với arr[0], nếu thấy arr[1]<arr[0] thì ta chèn nó vào trước arr[1],... Một cách tổng quát, ta sẽ sắp xếp dãy arr[0...i-1] trong điều kiện dãy khóa đã được sắp xếp rồi chèn arr[i] vào dãy đó tại đúng vị trí để được dãy arr[0...i] đã được sắp xếp.
 
+\paragraph{Cài đặt}
 \mnt{src/insertionsort.cpp}
+
+\paragraph{Đánh giá độ phức tạp thuật toán}
+Đối với thuật toán sắp xếp kiểu chèn, thì chi phí thời gian thực hiện thuật toán phụ thuộc vào
+tình trạng dãy khoá ban đầu. Nếu coi phép toán tích cực ở đây là phép so sánh $arr[i] > tmp$ thì:
+
+\begin{itemize}
+\item Trường hợp tốt nhất, ứng với dãy khóa đã sắp xếp rồi, mỗi lượt chỉ cần thực hiện một phép so sánh, như vậy, tổng số phép so sánh cần thực hiện là $n-1$. Phân tích trong trường hợp tốt nhất, độ phức tạp của thuật toán \emph{Insertion Sort} là $\Theta{n}$.
+\item Trường hợp tồi nhất ứng với dãy khóa đã có thứ tự ngược lại, ở lượt sắp xếp thứ $i$ cần thực hiện $i-1$ phép so sánh. Số phép so sánh cần thực hiện là:
+$$(n-1) + (n-2) + ... +1 = \frac{n(n-1)}{2}$$
+Vậy thời gian thực hiện của thuật toán trong trường hợp tồi nhất là $O(n^2)$.
+\item Trong trường hợp các khóa xuất hiện một cách ngẫu nhiên, có thể coi lượt thứ $i$ cần thực hiện $i/2$ phép so sánh. Tổng số phép so sánh trong trường hợp này là:
+
+$$\frac{1}{2} + \frac{2}{2} + ... + \frac{n}{2} = \frac{n(n-1)}{4}$$
+
+Vậy phân tích trong trường hợp trung bình, độ phức tạp tính toán của \emph{Insertion Sort} là $\Theta{n^2}$.
+
+\end{itemize}
+
+
 
 \subsection{Shell sort}
 
@@ -100,8 +140,23 @@ Nhược điểm của thuật toán sắp xếp chèn thể hiện khi mà ta l
 \item Dãy con h-1: arr[h-1], arr[2h-1], arr[3h-1], ...
 \end{itemize}
 
-Những dãy con như vậy được gọi là dãy con sắp xếp theo độ dài h. Tư tưởng của thuật toán ShellSort là : Với một bước h, áp dụng thuật toán sắp xếp kiểu chèn từng dãy con độc lập để làm mịn dần dãy khóa chính. Rồi lại làm tương tự đối với bước $h \% 2$ ... cho tới khi $h=1$ thì ta được dãy khóa đã sắp xếp.
+Những dãy con như vậy được gọi là dãy con sắp xếp theo độ dài h. Tư tưởng của thuật toán ShellSort là : Với một bước h, áp dụng thuật toán sắp xếp kiểu chèn từng dãy con độc lập để làm mịn dần dãy khóa chính. Rồi lại làm tương tự đối với bước $h \% 2$ ... cho tới khi $h = 1$ thì ta được dãy khóa đã sắp xếp.
 Đây chính là nguyên nhân ShellSort hiệu quả hơn thuật toán sắp xếp chèn: khóa nhỏ được nhanh chóng đưa về \emph{gần} vị trí đúng của nó.
+
+\paragraph{Cài đặt}
+\mnt{src/shellsort.cpp}
+
+\paragraph{Đánh giá độ phức tạp thuật toán}
+
+Việc đánh giá độ phức tạp của \emph{Shell Sort} là tương đối khó, ta thừa nhận các kết quả sau:
+
+\begin{itemize} 
+\item Nếu các bước $h$ được chọn theo thứ tự ngược từ dãy $1, 3, 7, 15, ..., 2^i-1, ...$ thì độ phức tạp là $O(n^\frac{3}{2})$.
+\item Nếu các bước $h$ được chọn theo thứ tự ngược từ dãy $1, 8, 23, 77, ..., 4^(i+1)+3.2^i + 1, ...$ thì độ phức tạp là $O(n^\frac{4}{3})$.
+\item Nếu các bước $h$ được chọn theo thứ tự ngược từ dãy $1, 2, 3, 4, 6, 8, 12, 16, ..., 2^i 3^i, ...$ thì đọ phức tạp là $O(n\log{}^2n)$.
+\end{itemize}
+
+
 
 \subsection{Thuật toán sắp xếp Quick Sort}
 
@@ -118,25 +173,71 @@ Sắp xếp dãy khóa arr[0...len-1] thì có thể coi là sắp xếp từ ch
 \item Hàm \texttt{void quicksort()} gọi hàm \texttt{partition(0, len-1)} thực hiện sắp xếp toàn bộ mảng. Thực ra ta có thể không cần tới hàm này.
 \end{itemize}
 
-\textbf{Cài đặt \texttt{quicksort}: }
+\paragraph{Cài đặt \texttt{quicksort}: }
 \mnt{src/quicksort.cpp}
+
+\paragraph{Đánh giá độ phức tạp}
+Giống với sắp xếp chèn, \emph{Quick Sort} có chi phí thời gian thực hiện phụ thuộc vào trạng thái của dãy khóa đầu vào.
+\begin{itemize}
+\item Trong trường hợp tốt nhất, ở mỗi bước luôn chọn đúng \emph{trung vị} \footnote{giá trị mà số khóa bé hơn giá trị đó bằng số khóa lớn hơn giá trị đó} của dãy khóa. Gọi thời gian thực hiện của giải thuật là $T(n)$.
+$$T(n) = 2T(\frac{n}{2}) + Cn$$
+trong đó C là hằng số.
+\begin{displaymath}
+\begin{array}{r l}
+T(n) &= 2(2T(\frac{n}{4}) + C\frac{n}{2}) + Cn\\
+\Rightarrow T(n) &= 2^2 T(\frac{n}{4}) + 2Cn\\
+\Rightarrow T(n) &=..............................\\
+\Rightarrow T(n) &= 2^k T(\frac{n}{2^k}) + kCn 
+\end{array}
+\end{displaymath}
+$T(\frac{n}{2^k}) = T(1)$ khi $n = 2^k \Rightarrow k = \log_2 n$. Thay $k = \log_2 n$ vào công thức trên, ta được:\\
+$$T(n) = 2^{\log_2{n}} T(1) + \log_2{n}Cn$$
+$$\Rightarrow  T(n) = n T(1) + Cn\log_2{n} = \Theta(n \log n)$$
+\item Trong trường hợp xấu nhất, ở mỗi bước ta luôn chọn đúng phần tử đầu dãy hoặc cuối dãy, số lần thực hiện vòng lặp $i\leq j$ ở lần đầu tiên là $n-1$, tiếp theo dãy được chia thành 2 dãy gồm 1 dãy có 1 phần tử, mất $T(1)$ và dãy kia $n-1$ phần tử. Tương tự, ta có:
+\begin{displaymath}
+\begin{array}{r l}
+T(n) &= n-1 + T(n-1) \\
+ &=  (n-1) + (n-2) + T(n-2)\\
+ &= .......................\\
+ &= (n-1) + (n-2) + ... + 1\\
+ &= \frac{n(n-1)}{2}
+\end{array}
+\end{displaymath}
+\item Trong trường hợp trung bình, cách tính độ phức tạp thuật toán tương tự như trường hợp tốt nhất. Giả sử ở lần gọi đệ quy thứ $i$ được chia thành 2 dãy $\frac{a_i}{c} n_i$ phần tử và $\frac{b_i}{c} n_i$ phần tử, trong đó $a_i + b_i = n_i$ và $a_i < b_i$, ta có:
+\begin{displaymath}
+\begin{array}{r l}
+T(n)=& T(\frac{a_{n-1}}{c}) + T(\frac{b_{n-1}}{c}) + C n\\
+T(n)=& (T(\frac{a_{n-1}}{c}) + \frac{a_{n-1}}{c}C n) + (T(\frac{b_{n-1}}{c}) + \frac{b_{n-1}}{c}C n)\\
+T(n)=& Max(T(\frac{a_{n-1}}{c}) \frac{a_{n-1}}{c}C n)+ ,T(\frac{b_{n-1}}{c}) + \frac{b_{n-1}}{c}C n))\\
+T(n)=& T(\frac{b_{n-1}}{c}) + \frac{b_{n-1}}{c}C n)
+\end{array}
+Giải tương tự như trường hợp 1, ta tính được độ phức tạp của thuật toán \emph{Quick Sort} trong trường hợp này là 
+\end{displaymath}
+\end{itemize}
+
 
 \subsection{Thuật toán sắp xếp vung đống - Heap Sort}
 
 Heap Sort được đề xuất bởi J.W.J.Williams năm 1981, thuật toán không những đóng góp một phương pháp sắp xếp quan trọng để biểu diễn một cấu trúc dữ liệu quan trọng 
 
 \subsubsection{Đống - Heap}
-Đống là một dạng \emph{cây nhị phân hoàn chỉnh đặc biệt} mà giá trị tại mọi nút có độ ưu tiên cao hơn hay bằng giá trị lưu trong hai nút con của nó. Trong thuật toán sắp xếp kiểu vun đống, ta coi quan hệ "ưu tiên hơn hay bằng" là quan hệ "lớn hơn hay bằng": $ \ge $
+Đống (Hình \ref{HeapTree}) là một dạng \emph{cây nhị phân hoàn chỉnh đặc biệt} mà giá trị tại mọi nút có độ ưu tiên cao hơn hay bằng giá trị lưu trong hai nút con của nó. Trong thuật toán sắp xếp kiểu vun đống, ta coi quan hệ "ưu tiên hơn hay bằng" là quan hệ "lớn hơn hay bằng": $ \ge $
 \begin{figure}[htb]
 \centering
-\includegraphics[scale=0.5]{img/heaptree.png}
-\caption{Heap}
+\includegraphics[scale=0.6]{img/heaptree.png}
+\caption{Đống}
 \label{HeapTree}
 \end{figure}
 
 \subsubsection{Vun đống}
 
-Để biểu diễn dãy khóa arr[0...len-1] thành một cây nhị phân hoàn chỉnh. Giá trị arr[i] lưu trong nút thứ i (i bắt đầu từ 0). Nút con trái của nút thứ i là arr[2i+1] và con phải của nút thứ i là arr[2i+2]. Nút cha của nút thứ j là $(j-1) \% 2$.
+Để biểu diễn dãy khóa arr[0...len-1] thành một cây nhị phân hoàn chỉnh. Giá trị arr[i] lưu trong nút thứ i (i bắt đầu từ 0). Nút con trái của nút thứ i là arr[2i+1] và con phải của nút thứ i là arr[2i+2]. Nút cha của nút thứ j là $(j-1) \% 2$. Hình \ref{mangdong} minh họa việc biểu diễn đống bằng mảng.
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.40]{img/bddong.png}
+\caption{Biểu diễn đống bằng mảng}
+\label{mangdong}
+\end{figure}
 
 Vì cây nhị phân gồm một nút thì hiển nhiên là đống. nên \textbf{để vun một nhánh cây gốc \texttt{r} thành đống, ta có thể coi hai nhánh con của nó là đống rồi và thực hiện thuật toán vun đống từ dưới lên đối với cây}. Gọi h là chiều cao của cây, nút ở mức h (nút lá) đã là một đống, ta vun lên những nút ở mức $h-1$ cũng là gốc của đống,... cứ như vậy cho tới mức 1 cũng là gốc của đống.
 
@@ -166,8 +267,10 @@ Thuật toán Heap Sort có hai hàm chính:
 \item Hàm \texttt{heapSort} mô tả lại quá trình vun đống theo ý tưởng trên
 \end{itemize}
 
+\paragraph{Cài đặt}
 \mnt{src/heapsort.cpp}
 
+\paragraph{Độ phức tạp thuật toán}
 
 
 \section{Các bài toán về thuật toán quay lui và kĩ thuật nhánh cận}
@@ -325,6 +428,32 @@ Hành trình cần tìm có dạng X[0...N], trong đó, $X[0] = X[N] = 0$, và 
 \end{description}
 
 \mnt{src/TSP.cpp}
+
+
+\section{Bài toán đánh chỉ mục cho danh sách từ khóa}
+
+\subsection{Bài toán}
+Có một file văn bản gồm danh sách các từ khóa và một file văn bản khác là tài liệu chứa các từ khóa đó. Viết chương trình lưu danh sách từ khóa và dòng xuất hiện của từ khóa đó trong tài liệu, cài đặt với các cấu trúc dữ liệu khác nhau: danh sách liên kết, bảng băm, cây nhị phân tìm kiếm.
+
+\subsection{Ý tưởng}
+Lưu cấu trúc chứa danh sách trang trong tập tin sau 
+
+\subsection{Cài đặt với danh sách liên kết}
+\mnt{src/linkedlist.cpp}
+
+\subsection{Cài đặt với bảng băm}
+\mnt{src/hashtable.cpp}
+
+\subsection{Cài đặt với cây nhị phân tìm kiếm}
+\mnt{src/tree.cpp}
+
+\subsection{Kết quả chạy thử}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.5]{img/kqbai3.png}
+\caption{Kết quả chạy thử}
+\label{}
+\end{figure}
 
 
 
