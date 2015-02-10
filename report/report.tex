@@ -1,26 +1,62 @@
-\documentclass[8pt, a4paper]{article}
-\usepackage{minted}
+
+\documentclass[a4paper,12pt]{report}
+\usepackage {xcolor}
+\usepackage {color}
+\usepackage[unicode]{hyperref}
+\usepackage[nottoc,numbib]{tocbibind}
+\hypersetup{colorlinks=true, urlcolor=green, linkcolor=black, unicode=true}
+\usepackage[utf8]{inputenc}
 \usepackage[utf8]{vietnam}
-\usepackage{amsmath}
-\usepackage[pdftex]{graphicx}
-\usepackage{color}
-\usepackage[margin=2.5cm]{geometry}
-\usepackage{amssymb}
+\usepackage{latexsym, amsfonts, amssymb, amsmath}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{fancybox}
+\usepackage{minted}
+\usepackage{frame}
+\usepackage{framed}
+\usepackage{graphicx}
+
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{matrix}
+\usetikzlibrary{automata,arrows,positioning,matrix,calc}
 
 \newcommand{\mnt}[1]{\inputminted[frame=single, linenos=true, tabsize=4]{c++}{#1}}
-\title{\textbf{\huge{ĐỒ ÁN I}}\\ \large{\textsc{LẬP TRÌNH}}}
-\author{Phạm Văn Thông}
-\date{}
-\usepackage{graphicx}
+
 \begin{document}
+\thispagestyle{empty}
+\thisfancypage{
+\setlength{\fboxsep}{0pt}
+\fbox}{} 
 \begin{center}
-\textbf{\Large{TRƯỜNG ĐẠI HỌC BÁCH KHOA HÀ NỘI}}\\
-\textsc{VIỆN CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG}
+    \begin{large}
+        \textcolor[rgb]{1.00,0.00,0.00}{TRƯỜNG ĐẠI HỌC BÁCH KHOA HÀ NỘI}
+    \end{large} \\
+    \begin{large}
+        \textcolor[rgb]{1.00,0.00,0.00}{VIỆN CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG}
+    \end{large} \\
 
-\vspace{2cm}
+    \textbf{--------------------  *  ---------------------}\\[2cm]
 
-\textbf{\Huge{ĐỒ ÁN I}} \\ \LARGE{\textsc{LẬP TRÌNH}}
-\author{}
+    \includegraphics[width=3cm, height=4.2cm]{img/logo.jpg}\\[1cm]
+    {\fontsize{32pt}{1}\selectfont ĐỒ ÁN I}\\
+    {\fontsize{20pt}{1}\selectfont LẬP TRÌNH}\\[2cm]
+\end{center}
+
+
+\begin{flushright}
+    \parbox[t]{10cm}{
+    \textbf{Phạm Văn Thông}\\MSSV: 20136495\\}
+\end{flushright}
+
+\hspace{5cm} Giáo viên hướng dẫn\hspace{24pt} :
+\begin{flushright} \textbf{\parbox[t]{8cm}{    
+        \textcolor[rgb]{0.00,0.00,1.00}{Phạm Đăng Hải}
+        }}
+\end{flushright}
+    \vspace{2cm}
+\begin{center}
+        {\fontsize{16pt}{1}\selectfont HÀ NỘI}\\
+        {\fontsize{16pt}{1}\today}
 \end{center}
 
 \newpage
@@ -490,29 +526,124 @@ Lưu các từ khóa trong các cấu trúc dữ liệu khác nhau - danh sách 
 \includegraphics[scale=0.40]{img/Diagram1.png}
 \caption{Danh sách liên kết chứa từ khóa.}
 \label{}
+
+
+\begin{tikzpicture}[every node/.style={minimum height=1.5em,minimum width=4em}]
+\matrix[matrix of math nodes](a)
+{T & |[minimum width=4em]| & & |[minimum width=4em]| & & |[minimum width=4em]| & & \\
+ |[minimum height=1.5em]|& & & & & & &\\
+key & & key & & key & & key & \\
+p & & p & & p & & p &\\
+*next & & *next & & *next & & *next & \\
+key & & & & & & & \\
+p & & & & & & & \\
+*next & & & & & & & \\
+key & & key & & key & & &\\
+p & & p & & p & & &\\
+*next & & *next & & *next & & &\\
+key & & & & & & & \\
+p & & & & & & & \\
+*next & & & & & & & \\
+|[minimum height=4.5em]|\ldots & & & & & & & \\
+key & & key & & key & & key &\\
+p & & p & & p & & p & \\
+*next & & *next & & *next & & *next & \\
+};
+\draw[very thick] (a-3-1.north west) -- (a-3-1.north east) -- (a-18-1.south east) -- (a-18-1.south west) -- (a-3-1.north west);
+\draw (a-3-1.south west) -- (a-3-1.south east);
+\draw (a-4-1.south west) -- (a-4-1.south east);
+\draw[very thick] (a-5-1.south west) -- (a-5-1.south east);
+\draw (a-6-1.south west) -- (a-6-1.south east);
+\draw (a-7-1.south west) -- (a-7-1.south east);
+\draw[very thick] (a-8-1.south west) -- (a-8-1.south east);
+\draw (a-9-1.south west) -- (a-9-1.south east);
+\draw (a-10-1.south west) -- (a-10-1.south east);
+\draw[very thick] (a-11-1.south west) -- (a-11-1.south east);
+\draw (a-12-1.south west) -- (a-12-1.south east);
+\draw (a-13-1.south west) -- (a-13-1.south east);
+\draw[very thick] (a-14-1.south west) -- (a-14-1.south east);
+\draw[very thick] (a-15-1.south west) -- (a-15-1.south east);
+\draw (a-16-1.south west) -- (a-16-1.south east);
+\draw (a-17-1.south west) -- (a-17-1.south east);
+
+\draw[very thick] (a-3-3.north west) -- (a-3-3.north east) -- (a-5-3.south east) -- (a-5-3.south west) -- (a-3-3.north west);
+\draw (a-3-3.south west) -- (a-3-3.south east);
+\draw (a-4-3.south west) -- (a-4-3.south east);
+
+\draw[very thick] (a-3-5.north west) -- (a-3-5.north east) -- (a-5-5.south east) -- (a-5-5.south west) -- (a-3-5.north west);
+\draw (a-3-5.south west) -- (a-3-5.south east);
+\draw (a-4-5.south west) -- (a-4-5.south east);
+
+\draw[very thick] (a-3-7.north west) -- (a-3-7.north east) -- (a-5-7.south east) -- (a-5-7.south west) -- (a-3-7.north west);
+\draw (a-3-7.south west) -- (a-3-7.south east);
+\draw (a-4-7.south west) -- (a-4-7.south east);
+
+\draw[very thick] (a-9-3.north west) -- (a-9-3.north east) -- (a-11-3.south east) -- (a-11-3.south west) -- (a-9-3.north west);
+\draw (a-9-3.south west) -- (a-9-3.south east);
+\draw (a-10-3.south west) -- (a-10-3.south east);
+
+\draw[very thick] (a-9-5.north west) -- (a-9-5.north east) -- (a-11-5.south east) -- (a-11-5.south west) -- (a-9-5.north west);
+\draw (a-9-5.south west) -- (a-9-5.south east);
+\draw (a-10-5.south west) -- (a-10-5.south east);
+
+\draw[very thick] (a-16-3.north west) -- (a-16-3.north east) -- (a-18-3.south east) -- (a-18-3.south west) -- (a-16-3.north west);
+\draw (a-16-3.south west) -- (a-16-3.south east);
+\draw (a-17-3.south west) -- (a-17-3.south east);
+
+\draw[very thick] (a-16-5.north west) -- (a-16-5.north east) -- (a-18-5.south east) -- (a-18-5.south west) -- (a-16-5.north west);
+\draw (a-16-5.south west) -- (a-16-5.south east);
+\draw (a-17-5.south west) -- (a-17-5.south east);
+
+\draw[very thick] (a-16-7.north west) -- (a-16-7.north east) -- (a-18-7.south east) -- (a-18-7.south west) -- (a-16-7.north west);
+\draw (a-16-7.south west) -- (a-16-7.south east);
+\draw (a-17-7.south west) -- (a-17-7.south east);
+
+\draw[->] (a-1-1.south) -- (a-3-1.north);
+
+\draw[->] (a-5-1.east) -|++(1em,0em) coordinate(aa) --++(1em,0em)|- (a-3-3.west);
+\draw[->] (a-5-3.east) -|++(1em,0em) coordinate(aa) --++(1em,0em)|- (a-3-5.west);
+\draw[->] (a-5-5.east) -|++(1em,0em) coordinate(aa) --++(1em,0em)|- (a-3-7.west);
+
+\draw[->] (a-11-1.east) -|++(1em,0em) coordinate(aa) --++(1em,0em)|- (a-9-3.west);
+\draw[->] (a-11-3.east) -|++(1em,0em) coordinate(aa) --++(1em,0em)|- (a-9-5.west);
+
+\draw[->] (a-18-1.east) -|++(1em,0em) coordinate(aa) --++(1em,0em)|- (a-16-3.west);
+\draw[->] (a-18-3.east) -|++(1em,0em) coordinate(aa) --++(1em,0em)|- (a-16-5.west);
+\draw[->] (a-18-5.east) -|++(1em,0em) coordinate(aa) --++(1em,0em)|- (a-16-7.west);
+\end{tikzpicture}
+\caption{Lưu các từ khóa vào bảng băm.}
 \end{figure}
 Với mỗi nút, ngoài mảng kí tự chứa từ khóa, ta còn lưu thêm một biến kiểu Node chính là \emph{Header} của danh sách liên kết, mà mỗi phần tử của danh sách liên kết là một số nguyên, biểu thị cho vị trí xuất hiện của từ khóa.
 
 Đọc lần lượt từng dòng của \emph{tài liệu} cần đánh chỉ mục, với mỗi dòng, đọc được, ta lần lượt tìm kiếm các từ xuất hiện trong dòng đó xem có trùng với từ khóa được lưu trữ trong cấu trúc dữ liệu trước đó không, nếu trùng, thêm vị trí xuất hiện của từ khóa (số thứ tự dòng) vào danh sách liên kết có header là phần tử kiểu Node. Xem hình minh họa để hiểu rõ hơn chi tiết cài đặt.
 
-
-
 \subsection{Cài đặt với danh sách liên kết}
 \mnt{src/linkedlist.cpp}
-\newpage
 \subsection{Cài đặt với bảng băm}
 \mnt{src/hashtable.cpp}
-\newpage
 \subsection{Cài đặt với cây nhị phân tìm kiếm}
 \mnt{src/tree.cpp}
 \subsection{Kết quả chạy thử}
 \begin{figure}[htp]
 \centering
-\includegraphics[scale=0.5]{img/kqbai3.png}
-\caption{Kết quả chạy thử}
+\includegraphics[scale=0.3]{img/linklist_rs.png}
+\caption{Phiên bản danh sách liên kết.}
 \label{}
 \end{figure}
 
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.3]{img/hashtable_rs.png}
+\caption{Phiên bản bảng băm.}
+\label{}
+\end{figure}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.3]{img/tree_rs.png}
+\caption{Phiên bản cây nhị phân tìm kiếm.}
+\label{}
+\end{figure}
 
 
 
